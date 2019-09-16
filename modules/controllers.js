@@ -1,4 +1,5 @@
 var fs = require('fs');
+var qs = require("querystring");
 exports.sobre = function (req, res) {
     fs.readFile('./views/sobre.html', function (err, html) {
         if (err) {
@@ -33,7 +34,7 @@ exports.aleatorio = function (req, res) {
 exports.primos = function (req, res) {
     let url = require('url');
     let valores = url.parse(req.url, true).query;
-    if (valores.valor1&&valores.valor2) {
+    if (valores.valor1 && valores.valor2) {
         fs.readFile('./views/primos.html', function (err, html) {
             if (err) {
                 throw err;
@@ -50,7 +51,7 @@ exports.primos = function (req, res) {
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(html.toString().replace('{{primos}}', '<h3>Resultado</h3><p style="word-break: break-all;">' + JSON.stringify(primos) + '</p>'));
                 res.end();
-            }else {
+            } else {
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(html.toString().replace('{{primos}}', '<h3>Valores fornecidos são inválidos</h3>'));
                 res.end();
@@ -69,31 +70,43 @@ exports.primos = function (req, res) {
     }
 };
 exports.equacao = function (req, res) {
-    let url = require('url');
-    let valores = url.parse(req.url, true).query;
-    if (valores.valorA&&valores.valorB&&valores.ValorC) {
-        fs.readFile('./views/primos.html', function (err, html) {
-            if (err) {
-                throw err;
-            }
-
-            let valor1 = valores.valor1;
-            let valor2 = valores.valor2;
-            let primos = [];
-            if (valor1 < valor2 && valor2 < 100) {
-                for (let i = valor1; i < valor2; i++) {
-                    ehPrimo(i) ? primos.push(i) : ''
+    if (req.method === 'POST') {
+        let body = ''
+        req.on('data', function (data) { body += data })
+        req.on('end', function () {
+            fs.readFile('./views/equacao.html', function (err, html) {
+                if (err) {
+                    throw err;
                 }
-
-                res.writeHead(200, {"Content-Type": "text/html"});
-                res.write(html.toString().replace('{{primos}}', '<h3>Resultado</h3><p style="word-break: break-all;">' + JSON.stringify(primos) + '</p>'));
-                res.end();
-            }else {
-                res.writeHead(200, {"Content-Type": "text/html"});
-                res.write(html.toString().replace('{{primos}}', '<h3>Valores fornecidos são inválidos</h3>'));
-                res.end();
-            }
+                let valores = qs.parse(body);
+                let valorA = valores.A;
+                let valorB = valores.B;
+                let valorC = valores.C;
+                if (valorA > 0) {
+                    let delta = (valorB * valorB) - (4 * valorA * valorC)
+                    if (delta >= 0) {
+                        let raizDelta = Math.sqrt(delta)
+                        let x1 = (-valorB + raizDelta) / (2 * valorA)
+                        let x2 = (-valorB - raizDelta) / (2 * valorA)
+                        res.writeHead(200, {"Content-Type": "text/html"});
+                        res.write(html.toString().replace('{{equacao}}',
+                            `<h3>Resultado</h3>
+                        <p>Valor da Primeira Raíz =  ${x1.toFixed(1)} </p>
+                        <p>Valor da Segunda Raíz = ${x2.toFixed(1)} </p><br/>`));
+                        res.end();
+                    } else {
+                        res.writeHead(200, {"Content-Type": "text/html"});
+                        res.write(html.toString().replace('{{equacao}}', '<h3>A equação não possui raízes reais</h3>'));
+                        res.end();
+                    }
+                } else {
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(html.toString().replace('{{equacao}}', '<h3>Valores fornecidos são inválidos</h3>'));
+                    res.end();
+                }
+            })
         })
+
     } else {
         fs.readFile('./views/equacao.html', function (err, html) {
             if (err) {
