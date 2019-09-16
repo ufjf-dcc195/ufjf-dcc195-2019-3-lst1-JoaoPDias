@@ -11,7 +11,7 @@ handlers["/aleatorios.html"] = controllers.aleatorio;
 handlers["/primos.html"] = controllers.primos;
 handlers["/equacao.html"] = controllers.equacao;
 handlers["404"] = controllers.notfound;
-handlers["/xadrez.html"] = controllers.sobre;
-handlers["/xadrez.json"] = controllers.sobre;
+handlers["/xadrez.html"] = controllers.xadrez;
+handlers["/xadrez.json"] = controllers.xadrez;
 
 server.start(route.route,handlers);

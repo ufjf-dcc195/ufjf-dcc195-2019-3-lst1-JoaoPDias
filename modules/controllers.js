@@ -1,5 +1,6 @@
-var fs = require('fs');
-var qs = require("querystring");
+const fs = require('fs');
+const qs = require("querystring");
+const tabuleiro = require('./tabuleiro')
 exports.sobre = function (req, res) {
     fs.readFile('./views/sobre.html', function (err, html) {
         if (err) {
@@ -72,7 +73,9 @@ exports.primos = function (req, res) {
 exports.equacao = function (req, res) {
     if (req.method === 'POST') {
         let body = ''
-        req.on('data', function (data) { body += data })
+        req.on('data', function (data) {
+            body += data
+        })
         req.on('end', function () {
             fs.readFile('./views/equacao.html', function (err, html) {
                 if (err) {
@@ -137,18 +140,46 @@ exports.notfound = function (req, res) {
     res.end();
 };
 
-exports.ls = function (req, res) {
-    const exec = require("child_process").exec;
-    console.log("Handler: lista!");
-    var resposta = "vazia";
-    exec("dir /w", function (error, stdout, stderr) {
-        resposta = stdout;
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        res.write(resposta, "utf8");
-        res.end();
-    });
+exports.xadrez = function (req, res) {
+    if (req.method === 'POST') {
+        let body = '';
+        req.on('data', function (data) {
+            body += data
+        });
+        req.on('end', function () {
+            fs.readFile('./views/xadrez.html', function (err, html) {
+                if (err) {
+                    throw err;
+                }
+                let valores = qs.parse(body);
+                let linha = parseInt(valores.linha);
+                let coluna = parseInt(valores.coluna);
+                if (linha > 0 && coluna > 0) {
+                    let novoTabuleiro = tabuleiro.jogada(linha, coluna);
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(html.toString().replace('{{tabuleiro}}', novoTabuleiro));
+                    res.end();
+                } else {
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(html.toString().replace('{{tabuleiro}}', '<h3>Dados Inválidos</h3>'));
+                    res.end();
+                }
+            })
+        })
+    } else {
+        fs.readFile('./views/xadrez.html', function (err, html) {
+            if (err) {
+                throw err;
+            }
+            let tabuleiroPadrao = tabuleiro.tabuleiroPadrao();
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(html.toString().replace('{{tabuleiro}}', tabuleiroPadrao));
+            res.end();
 
-};
+        })
+    }
+}
+;
 
 function getRandom() {
     return Math.random();
@@ -163,6 +194,5 @@ function ehPrimo(numero) {
     }
     return false
 }
-
 
 
