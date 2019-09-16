@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Primos</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#textoNavbar" aria-controls="textoNavbar" aria-expanded="false" aria-label="Alterna navegação">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="textoNavbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="sobre.html">Sobre</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="aleatorios.html">Aleatórios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="primos.html">Primos<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="equacao.html">Equação</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="xadrez.html">Xadrez</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="xadrez.json">Xadrez JSON</a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+      UFJF - DCC195
+    </span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6">
+            <h3>Números Primos presentes no Intervalo</h3>
+            <form method="get">
+                <div class="form-group">
+                    <label for="valor1">Primeiro Valor</label>
+                    <input type="number" class="form-control" id="valor1" name="valor1" placeholder="Digite um número" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="valor2">Segundo Valor</label>
+                    <input type="number" class="form-control" id="valor2" name="valor2" placeholder="Digite um número" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Enviar</button>
+                <button type="reset" class="btn btn-danger">Cancelar</button>
+            </form>
+        </div>
+        <div class="col-xl-6 text-break">
+            {{primos}}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
