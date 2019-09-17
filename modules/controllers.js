@@ -1,6 +1,6 @@
 const fs = require('fs');
 const qs = require("querystring");
-const tabuleiro = require('./tabuleiro')
+const tabuleiro = require('./tabuleiro');
 exports.sobre = function (req, res) {
     fs.readFile('./views/sobre.html', function (err, html) {
         if (err) {
@@ -72,10 +72,10 @@ exports.primos = function (req, res) {
 };
 exports.equacao = function (req, res) {
     if (req.method === 'POST') {
-        let body = ''
+        let body = '';
         req.on('data', function (data) {
             body += data
-        })
+        });
         req.on('end', function () {
             fs.readFile('./views/equacao.html', function (err, html) {
                 if (err) {
@@ -86,11 +86,11 @@ exports.equacao = function (req, res) {
                 let valorB = valores.B;
                 let valorC = valores.C;
                 if (valorA > 0) {
-                    let delta = (valorB * valorB) - (4 * valorA * valorC)
+                    let delta = (valorB * valorB) - (4 * valorA * valorC);
                     if (delta >= 0) {
-                        let raizDelta = Math.sqrt(delta)
-                        let x1 = (-valorB + raizDelta) / (2 * valorA)
-                        let x2 = (-valorB - raizDelta) / (2 * valorA)
+                        let raizDelta = Math.sqrt(delta);
+                        let x1 = (-valorB + raizDelta) / (2 * valorA);
+                        let x2 = (-valorB - raizDelta) / (2 * valorA);
                         res.writeHead(200, {"Content-Type": "text/html"});
                         res.write(html.toString().replace('{{equacao}}',
                             `<h3>Resultado</h3>
@@ -178,8 +178,47 @@ exports.xadrez = function (req, res) {
 
         })
     }
-}
-;
+};
+
+exports.xadrezJSON = function (req, res) {
+    if (req.method === 'POST') {
+        let body = '';
+        req.on('data', function (data) {
+            body += data
+        });
+        req.on('end', function () {
+            fs.readFile('./views/xadrez.html', function (err, html) {
+                if (err) {
+                    throw err;
+                }
+                let valores = qs.parse(body);
+                let linha = parseInt(valores.linha);
+                let coluna = parseInt(valores.coluna);
+                if (linha > 0 && coluna > 0) {
+                    let novoTabuleiro = tabuleiro.jogadaJSON(linha, coluna);
+                    let tabuleiroJSON = JSON.stringify(novoTabuleiro);
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(html.toString().replace('{{tabuleiro}}', tabuleiroJSON));
+                    res.end();
+                } else {
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(html.toString().replace('{{tabuleiro}}', '<h3>Dados Inválidos</h3>'));
+                    res.end();
+                }
+            })
+        })
+    } else {
+        fs.readFile('./views/xadrez.html', function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(html.toString().replace('{{tabuleiro}}', ''));
+            res.end();
+
+        })
+    }
+};
 
 function getRandom() {
     return Math.random();

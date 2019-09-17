@@ -1,7 +1,7 @@
 exports.jogada = (l, c) => {
     var tabuleiro = `<table id="tabuleiro" class="text-center">`;
     for (let i = 1; i < 9; i++) {
-        tabuleiro += '<tr>'
+        tabuleiro += '<tr>';
         for (let j = 1; j < 9; j++) {
             if ((i + j) % 2 === 0) {
                 if (i === l && j === c) {
@@ -24,13 +24,13 @@ exports.jogada = (l, c) => {
         }
         tabuleiro += '</tr>';
     }
-    tabuleiro += '</table>'
+    tabuleiro += '</table>';
     return tabuleiro;
 };
 exports.tabuleiroPadrao = () => {
     var tabuleiro = `<table id="tabuleiro" class="text-center">`;
     for (let i = 1; i < 9; i++) {
-        tabuleiro += '<tr>'
+        tabuleiro += '<tr>';
         for (let j = 1; j < 9; j++) {
             if ((i + j) % 2 === 0) {
                 tabuleiro += '<td class="vermelho"></td>'
@@ -42,7 +42,7 @@ exports.tabuleiroPadrao = () => {
         }
         tabuleiro += '</tr>';
     }
-    tabuleiro += '</table>'
+    tabuleiro += '</table>';
     return tabuleiro;
 };
 
@@ -54,5 +54,21 @@ function possibilidade(l, c, i, j) {
         || (l - 2 === i && (c + 1 === j || c - 1 === j)));
 }
 
+exports.jogadaJSON = (l, c) => {
+    var tabuleiro = [];
+    for (let i = 1; i < 9; i++) {
+        for (let j = 1; j < 9; j++) {
+                if (i === l && j === c) {
+                    tabuleiro.push({'Casa':  i + ' ' + j + ' Cavalo'});
+                } else if (possibilidade(l, c, i, j)) {
+                    tabuleiro.push({'Casa ':  i + ' ' + j + ' Possibilidade'});
+                } else {
+                    tabuleiro.push({'Casa ':  i + ' ' + j});
+            }
+
+        }
+    }
+    return tabuleiro;
+};
 
 
