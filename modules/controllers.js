@@ -154,7 +154,7 @@ exports.xadrez = function (req, res) {
                 let valores = qs.parse(body);
                 let linha = parseInt(valores.linha);
                 let coluna = parseInt(valores.coluna);
-                if (linha > 0 && coluna > 0) {
+                if (linha > 0 && coluna > 0 && linha < 9 && coluna < 9) {
                     let novoTabuleiro = tabuleiro.jogada(linha, coluna);
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(html.toString().replace('{{tabuleiro}}', novoTabuleiro));
@@ -194,7 +194,7 @@ exports.xadrezJSON = function (req, res) {
                 let valores = qs.parse(body);
                 let linha = parseInt(valores.linha);
                 let coluna = parseInt(valores.coluna);
-                if (linha > 0 && coluna > 0) {
+                if (linha > 0 && coluna > 0 && linha < 9 && coluna < 9) {
                     let novoTabuleiro = tabuleiro.jogadaJSON(linha, coluna);
                     let tabuleiroJSON = JSON.stringify(novoTabuleiro);
                     res.writeHead(200, {"Content-Type": "text/html"});
